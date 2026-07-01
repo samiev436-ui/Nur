@@ -7,15 +7,9 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script>
-        const supabase = supabase.createClient(
-            "https://avldlzkjprmqxmbgbclm.supabase.co",
-            "sb_publishable_CQHNtBi_q4PhwAIMkJ-Rxw_DicNz5Yr"
-        );
-    </script>
+    <script src="app.js"></script>
 
     <link rel="stylesheet" href="styles/style.css">
-    <script src="app.js"></script>
 </head>
 
 <body class="dark">
@@ -46,7 +40,7 @@
             <img src="https://i.imgur.com/7kQEsHU.png" class="avatar" alt="avatar">
 
             <div>
-                <p><strong>Email:</strong> <span id="userEmail">Загрузка...</span></p>
+                <p><strong>Email:</strong> <span id="userEmail">⏳ Загрузка...</span></p>
                 <p><strong>Статус:</strong> Пользователь</p>
             </div>
         </div>
@@ -56,10 +50,10 @@
 
     <div class="card">
         <h2>Ваш прогресс</h2>
-        <p>Избранное — скоро</p>
-        <p>Закладки — скоро</p>
-        <p>История чтения — скоро</p>
-        <p>Планы обучения — скоро</p>
+        <p>✨ Избранное — скоро</p>
+        <p>✨ Закладки — скоро</p>
+        <p>✨ История чтения — скоро</p>
+        <p>✨ Планы обучения — скоро</p>
     </div>
 
 </div>
@@ -70,14 +64,24 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-    const user = await getCurrentUser();
+    console.log("📋 Загрузка профиля пользователя...");
+    
+    try {
+        const user = await getCurrentUser();
 
-    if (!user) {
-        window.location.href = "login.html";
-        return;
+        if (!user) {
+            console.warn("⚠️ Пользователь не найден, перенаправление на login");
+            window.location.href = "login.html";
+            return;
+        }
+
+        console.log("✅ Пользователь загружен:", user.email);
+        document.getElementById("userEmail").textContent = user.email || "Неизвестный пользователь";
+        
+    } catch (err) {
+        console.error("❌ Ошибка при загрузке профиля:", err);
+        document.getElementById("userEmail").textContent = "❌ Ошибка загрузки";
     }
-
-    document.getElementById("userEmail").textContent = user.email;
 });
 </script>
 
