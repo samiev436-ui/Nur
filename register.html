@@ -7,15 +7,9 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script>
-        const supabase = supabase.createClient(
-            "https://avldlzkjprmqxmbgbclm.supabase.co",
-            "sb_publishable_CQHNtBi_q4PhwAIMkJ-Rxw_DicNz5Yr"
-        );
-    </script>
+    <script src="app.js"></script>
 
     <link rel="stylesheet" href="styles/style.css">
-    <script src="app.js"></script>
 </head>
 
 <body class="dark">
@@ -53,6 +47,7 @@
                 Уже есть аккаунт? <a href="login.html">Войти</a>
             </p>
         </form>
+        <div id="regMessage"></div>
     </div>
 
 </div>
@@ -64,19 +59,31 @@
 <script>
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+    
+    const messageDiv = document.getElementById("regMessage");
+    messageDiv.innerHTML = "⏳ Регистрация...";
 
     const email = document.getElementById("regEmail").value;
     const password = document.getElementById("regPassword").value;
 
-    const result = await registerUser(email, password);
-
-    if (result.error) {
-        alert("Ошибка: " + result.error.message);
+    if (password.length < 6) {
+        messageDiv.innerHTML = "❌ Пароль должен быть не менее 6 символов";
         return;
     }
 
-    alert("Регистрация успешна!");
-    window.location.href = "login.html";
+    const result = await registerUser(email, password);
+
+    if (result.error) {
+        messageDiv.innerHTML = `❌ Ошибка: ${result.error.message}`;
+        console.error("❌ Ошибка регистрации:", result.error);
+        return;
+    }
+
+    messageDiv.innerHTML = "✅ Регистрация успешна! Перенаправление на вход...";
+    console.log("✅ Пользователь успешно зарегистрирован");
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 2000);
 });
 </script>
 
