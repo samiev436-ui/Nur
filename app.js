@@ -7,6 +7,10 @@
 const supabaseUrl = "https://avldlzkjprmqxmbgbclm.supabase.co";
 const supabaseKey = "sb_publishable_CQHNtBi_q4PhwAIMkJ-Rxw_DicNz5Yr";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = supabase.createClient(
+  "https://avldlzjkprmqxmbgbclm.supabase.co",
+  "sb-publishable-key-sb_publishable_eGTuWsEeOkM7pDusc3bxBA_CFkN0NY0"
+);
 
 console.log("✅ Supabase подключён");
 
