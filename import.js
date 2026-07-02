@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 //
 const supabase = createClient(
   "https://avldlzjkprmqxnr.supabase.co",
-  sb_secret_lde7hdJcuwlJCFsalqa3qg_lsUy_H-n
+   "SERVICE_ROLE_KEY=sb_secret_lde7hdJcuwlJCFsalqa3qg_lsUy_H-n"
 );
 
 // ----------------------
