@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 //
 const supabase = createClient(
   "https://avldlzjkprmqxnr.supabase.co",
-  sb_publishable_M8Tuw2xR292hkdciEpj3tA_OvFdFZ_j
+  sb_secret_lde7hdJcuwlJCFsalqa3qg_lsUy_H-n
 );
 
 // ----------------------
