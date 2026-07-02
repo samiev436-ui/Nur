@@ -318,6 +318,121 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Импорт завершён!");
 }
+async function autoImportHadiths() {
+  const { data: existingHadiths, error: checkError } = await supabase
+    .from("hadiths")
+    .select("id")
+    .limit(1);
 
-// Запускаем импорт автоматически
-autoImportAyahs();
+  if (checkError) {
+    console.error("Ошибка проверки таблицы hadiths:", checkError);
+    return;
+  }
+
+  if (existingHadiths && existingHadiths.length > 0) {
+    console.log("Хадисы уже загружены — импорт не требуется.");
+    return;
+  }
+
+  console.log("Начинаю импорт хадисов...");
+
+  const response = await fetch("https://hadithapi.com/api/books/bukhari?apiKey=YOUR_API_KEY");
+  const json = await response.json();
+
+  for (const h of json.data.hadiths) {
+    const { error: insertError } = await supabase
+      .from("hadiths")
+      .insert({
+        source: "Bukhari",
+        number: h.hadithNumber,
+        arabic: h.hadithArabic,
+        translation: h.hadithEnglish
+      });
+
+    if (insertError) {
+      console.error("Ошибка вставки хадиса:", insertError);
+    }
+  }
+
+  console.log("Импорт хадисов завершён.");
+}
+async function autoImportDua() {
+  const { data: existingDua, error: checkError } = await supabase
+    .from("dua")
+    .select("id")
+    .limit(1);
+
+  if (checkError) {
+    console.error("Ошибка проверки таблицы dua:", checkError);
+    return;
+  }
+
+  if (existingDua && existingDua.length > 0) {
+    console.log("Дуа уже загружены — импорт не требуется.");
+    return;
+  }
+
+  console.log("Начинаю импорт дуа...");
+
+  const response = await fetch("https://your-domain.com/data/dua.json");
+  const duas = await response.json();
+
+  for (const d of duas) {
+    const { error: insertError } = await supabase
+      .from("dua")
+      .insert({
+        arabic: d.arabic,
+        translation: d.translation,
+        description: d.description
+      });
+
+    if (insertError) {
+      console.error("Ошибка вставки дуа:", insertError);
+    }
+  }
+
+  console.log("Импорт дуа завершён.");
+}
+async function autoImportTafsir() {
+  const { data: existingTafsir, error: checkError } = await supabase
+    .from("tafsir")
+    .select("id")
+    .limit(1);
+
+  if (checkError) {
+    console.error("Ошибка проверки таблицы tafsir:", checkError);
+    return;
+  }
+
+  if (existingTafsir && existingTafsir.length > 0) {
+    console.log("Тафсир уже загружен — импорт не требуется.");
+    return;
+  }
+
+  console.log("Начинаю импорт тафсира...");
+
+  const response = await fetch("https://your-domain.com/data/tafsir.json");
+  const tafsirData = await response.json();
+
+  for (const t of tafsirData) {
+    const { error: insertError } = await supabase
+      .from("tafsir")
+      .insert({
+        ayah_id: t.ayah_id,
+        text: t.text,
+        source: t.source
+      });
+
+    if (insertError) {
+      console.error("Ошибка вставки тафсира:", insertError);
+    }
+  }
+
+  console.log("Импорт тафсира завершён.");
+}
+(async () => {
+  await autoImportAyahs();
+  await autoImportHadiths();
+  await autoImportDua();
+  await autoImportTafsir();
+})();
